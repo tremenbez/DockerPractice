@@ -1,0 +1,48 @@
+services:
+  temp_sensor:
+    image: tremenbez/data
+    environment:
+      - SIM_HOST=192.168.21.10  
+      - SIM_NAME=TEMP1
+      - SIM_PERIOD=5
+      - SIM_TYPE=temperature
+    networks:
+      mqtt-net:
+        ipv4_address: 192.168.21.11
+
+  pressure_sensor:
+    image: tremenbez/data
+    environment:
+      - SIM_HOST=192.168.21.10  
+      - SIM_NAME=PRES1
+      - SIM_PERIOD=10
+      - SIM_TYPE=pressure
+    networks:
+      mqtt-net:
+        ipv4_address: 192.168.21.12
+
+  current_sensor:
+    image: tremenbez/data
+    environment:
+      - SIM_HOST=192.168.21.10  
+      - SIM_NAME=CUR1
+      - SIM_PERIOD=3
+      - SIM_TYPE=current
+    networks:
+      mqtt-net:
+        ipv4_address: 192.168.21.13
+
+  humidity_sensor:
+    image: tremenbez/data
+    environment:
+      - SIM_HOST=192.168.21.10  
+      - SIM_NAME=HUM1
+      - SIM_PERIOD=7
+      - SIM_TYPE=humidity
+    networks:
+      mqtt-net:
+        ipv4_address: 192.168.21.14
+
+networks:
+  mqtt-net:
+    external: true

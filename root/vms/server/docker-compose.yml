@@ -1,0 +1,44 @@
+services:
+  influxdb:
+    image: influxdb:1.8
+    container_name: influxdb
+    volumes:
+      - ./influxdb/scripts:/docker-entrypoint-initdb.d
+      - influx_data:/var/lib/influxdb
+    networks:
+      mqtt-net:
+        ipv4_address: 192.168.21.20
+
+  telegraf:
+    image: telegraf
+    container_name: telegraf
+    volumes:
+      - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    networks:
+      mqtt-net:
+        ipv4_address: 192.168.21.21
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    networks:
+      mqtt-net:
+        ipv4_address: 192.168.21.22
+
+volumes:
+  influx_data: {}
+  grafana_data: {}
+
+networks:
+  mqtt-net:
+    external: true
